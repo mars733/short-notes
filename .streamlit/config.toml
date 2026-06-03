@@ -1,0 +1,3 @@
+[server]
+#This disables the file watcher and stops the "inotify" error
+fileWatcherType = "none"

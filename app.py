@@ -16,6 +16,8 @@ def process_text(text_lines):
             if in_code_block:
                 # Ending a code block
                 code_str = "\n".join(code_content)
+                # Remove multiple blank lines
+                code_str = re.sub(r'\n\s*\n+', '\n', code_str).strip()
                 processed_html.append(f'<pre class="code-block">{code_str}</pre>')
                 code_content = []
                 in_code_block = False
@@ -25,7 +27,8 @@ def process_text(text_lines):
             continue
         
         if in_code_block:
-            code_content.append(line.replace("<", "&lt;").replace(">", "&gt;"))
+            # Preserve leading indentation but clean trailing whitespace
+            code_content.append(line.rstrip().replace("<", "&lt;").replace(">", "&gt;"))
             continue
 
         if not cleaned:
@@ -84,13 +87,13 @@ def generate_html(content, font_size, line_height, margin):
             font-weight: bold;
             text-decoration: underline;
             display: inline-block;
-            margin-top: 4px;
+            margin-top: 2px;
         }}
         .question {{
             font-weight: bold;
             font-style: italic;
             display: inline-block;
-            margin-top: 4px;
+            margin-top: 2px;
         }}
         .key-term {{
             font-weight: bold;
@@ -98,13 +101,13 @@ def generate_html(content, font_size, line_height, margin):
         .code-block {{
             font-family: 'Courier New', Courier, monospace;
             background-color: #f0f0f0;
-            border: 0.5px solid #ccc;
-            padding: 2px;
-            font-size: 0.85em;
-            line-height: 1.0;
+            border: 0.3px solid #ccc;
+            padding: 1px;
+            font-size: 0.8em;
+            line-height: 0.9;
             white-space: pre-wrap;
             word-wrap: break-word;
-            margin: 2px 0;
+            margin: 0;
             display: block;
         }}
         span {{
